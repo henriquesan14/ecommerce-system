@@ -10,19 +10,8 @@ using ECommerceSystem.Shared.CQRS;
 
 namespace ECommerceSystem.Application.Commands.CreateOrder
 {
-    internal class CreateOrderCommandHandler : ICommandHandler<CreateOrderCommand, Result<OrderViewModel>>
+    internal class CreateOrderCommandHandler(IUnitOfWork _unitOfWork, IEventBus _eventBus, IMapper _mapper) : ICommandHandler<CreateOrderCommand, Result<OrderViewModel>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IEventBus _eventBus;
-        private readonly IMapper _mapper;
-
-        public CreateOrderCommandHandler(IUnitOfWork unitOfWork, IEventBus eventBus, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _eventBus = eventBus;
-            _mapper = mapper;
-        }
-
         public async Task<Result<OrderViewModel>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var entity = _mapper.Map<Order>(request);

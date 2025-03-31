@@ -6,17 +6,8 @@ using ECommerceSystem.Shared.CQRS;
 
 namespace ECommerceSystem.Application.Queries.GetOrders
 {
-    internal class GetOrdersQueryHandler : IQueryHandler<GetOrdersQuery, Result<List<OrderViewModel>>>
+    internal class GetOrdersQueryHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IQueryHandler<GetOrdersQuery, Result<List<OrderViewModel>>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public GetOrdersQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<Result<List<OrderViewModel>>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
         {
             var list = await _unitOfWork.Orders.GetAllAsync();

@@ -6,6 +6,8 @@ using ECommerceSystem.Infrastructure.Persistence;
 using ECommerceSystem.Shared.Behaviors;
 using ECommerceSystem.Shared.Exceptions.Handler;
 using FluentValidation;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -38,6 +40,8 @@ builder.Services.AddAutoMapperConfig();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
+builder.Services.AddHealthChecksConfig(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -54,6 +58,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 
 app.Run();
