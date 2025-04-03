@@ -5,7 +5,7 @@ using ECommerceSystem.Shared.CQRS;
 
 namespace ECommerceSystem.Application.Commands.CreateOrder
 {
-    public record CreateOrderCommand(List<OrderItemInputModel> Itens, int CustomerId) : ICommand<Result<OrderViewModel>>
+    public record CreateOrderCommand(List<OrderItemInputModel> Itens, Guid CustomerId) : ICommand<Result<OrderViewModel>>
     {
     }
 }

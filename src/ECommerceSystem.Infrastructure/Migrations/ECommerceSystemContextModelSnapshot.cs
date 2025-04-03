@@ -24,32 +24,32 @@ namespace ECommerceSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("ECommerceSystem.Domain.Entities.Order", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp");
 
-                    b.Property<int>("CreatedByUserId")
-                        .HasColumnType("integer");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("PENDING");
 
                     b.Property<decimal>("Total")
                         .HasColumnType("numeric");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp");
-
-                    b.Property<int>("UpdatedByUserId")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -58,34 +58,31 @@ namespace ECommerceSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("ECommerceSystem.Domain.Entities.OrderItem", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp");
 
-                    b.Property<int>("CreatedByUserId")
-                        .HasColumnType("integer");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("integer");
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("ProdutoId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp");
-
-                    b.Property<int>("UpdatedByUserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -97,13 +94,11 @@ namespace ECommerceSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("ECommerceSystem.Domain.Entities.OrderItem", b =>
                 {
-                    b.HasOne("ECommerceSystem.Domain.Entities.Order", "Order")
+                    b.HasOne("ECommerceSystem.Domain.Entities.Order", null)
                         .WithMany("Itens")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("ECommerceSystem.Domain.Entities.Order", b =>

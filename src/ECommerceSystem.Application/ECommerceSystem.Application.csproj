@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="14.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ECommerceSystem.Domain\ECommerceSystem.Domain.csproj" />
     <ProjectReference Include="..\ECommerceSystem.EventBus\ECommerceSystem.EventBus.csproj" />
   </ItemGroup>

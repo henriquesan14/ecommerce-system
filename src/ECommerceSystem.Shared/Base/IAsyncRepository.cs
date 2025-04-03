@@ -2,34 +2,34 @@
 
 namespace ECommerceSystem.Shared.Base
 {
-    public interface IAsyncRepository<T> where T : Entity
+    public interface IAsyncRepository<TEntity, TId> where TEntity : IAggregate<TId>
     {
-        Task<IReadOnlyList<T>> GetAllAsync(Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, bool disableTracking = true);
+        Task<IReadOnlyList<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, bool disableTracking = true);
 
-        Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate);
+        Task<IReadOnlyList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate);
 
-        Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null,
-          Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+        Task<IReadOnlyList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate = null,
+          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
           string includeString = null,
           bool disableTracking = true);
 
-        Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null,
-          Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-          List<Expression<Func<T, object>>> includes = null,
+        Task<IReadOnlyList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate = null,
+          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+          List<Expression<Func<TEntity, object>>> includes = null,
           bool disableTracking = true,
           int? pageNumber = null, int? pageSize = 20);
 
-        Task<T> GetByIdAsync(int id, bool disableTracking = false, List<Expression<Func<T, object>>> includes = null);
+        Task<TEntity> GetByIdAsync(TId id, bool disableTracking = false, List<Expression<Func<TEntity, object>>> includes = null);
 
-        Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate, bool disableTracking = false, List<Expression<Func<T, object>>> includes = null);
+        Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> predicate, bool disableTracking = false, List<Expression<Func<TEntity, object>>> includes = null);
 
-        Task<T> AddAsync(T entity);
+        Task<TEntity> AddAsync(TEntity entity);
 
-        Task AddRangeAsync(List<T> entity);
+        Task AddRangeAsync(List<TEntity> entity);
 
-        void UpdateAsync(T entity);
+        void UpdateAsync(TEntity entity);
 
-        void DeleteAsync(T entity);
-        Task<int> GetCountAsync(Expression<Func<T, bool>> predicate = null);
+        void DeleteAsync(TEntity entity);
+        Task<int> GetCountAsync(Expression<Func<TEntity, bool>> predicate = null);
     }
 }

@@ -1,23 +1,26 @@
 ﻿namespace ECommerceSystem.Shared.Base
 {
-    public class Entity
+    public abstract class Entity<T> : IEntity<T>
     {
-        public int Id { get; protected set; }
-        public int CreatedByUserId { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public int UpdatedByUserId { get; set; }
-        public DateTime? UpdatedAt { get; set; }
+        public T Id { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? LastModified { get; set; }
+        public string? LastModifiedBy { get; set; }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            if (obj == null || !(obj is Entity))
+            if (obj is not Entity<T> other)
             {
                 return false;
             }
 
-            Entity outraEntity = (Entity)obj;
+            if (Id is null || other.Id is null)
+            {
+                return false;
+            }
 
-            return this.Id == outraEntity.Id;
+            return Id.Equals(other.Id);
         }
 
         public override int GetHashCode()

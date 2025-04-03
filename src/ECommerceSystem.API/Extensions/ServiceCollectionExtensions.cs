@@ -11,11 +11,11 @@ namespace ECommerceSystem.API.Extensions
         {
             //Repositories
 
-            services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
-            services.AddTransient<IOrderRepository, OrderRepository>();
-            services.AddTransient<IOrderItemRepository, OrderItemRepository>();
+            services.AddScoped(typeof(IAsyncRepository<,>), typeof(RepositoryBase<,>));
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             //Services
 

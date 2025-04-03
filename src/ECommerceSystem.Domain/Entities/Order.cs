@@ -1,27 +1,57 @@
 ﻿using ECommerceSystem.Domain.Enums;
+using ECommerceSystem.Domain.Events;
+using ECommerceSystem.Domain.ValueObjects;
 using ECommerceSystem.Shared.Base;
 
 namespace ECommerceSystem.Domain.Entities
 {
-    public class Order : Entity
+    public class Order : Aggregate<OrderId>
     {
         public OrderStatusEnum Status { get; private set; }
-        public decimal Total { get; private set; }
-        public List<OrderItem> Itens { get; private set; }
-        public int CustomerId { get; private set; }
+        public Guid CustomerId { get; private set; }
+        public decimal Total
+        {
+            get => Items.Sum(x => x.Price * x.Quantity);
+            private set { }
+        }
+
+        private readonly List<OrderItem> _Items = new();
+        public IReadOnlyList<OrderItem> Items => _Items.AsReadOnly();
 
         private Order()
         {
-            Itens = new List<OrderItem>();
+            Id = OrderId.Of(Guid.NewGuid());
+            _Items = new List<OrderItem>();
         }
 
-        public Order(List<OrderItem> itens, int customerId)
+        public Order(List<OrderItem> itens, Guid customerId)
         {
-            Itens = itens;
+            _Items = itens;
             CustomerId = customerId;
-            CreatedAt = DateTime.UtcNow;
+            CreatedAt = DateTime.Now;
             Status = OrderStatusEnum.PENDING;
-            Total = CalculateTotal();
+        }
+
+        public static Order Create(OrderId id, Guid customerId)
+        {
+            var order = new Order
+            {
+                Id = id,
+                CustomerId = customerId,
+                Status = OrderStatusEnum.PENDING
+            };
+
+            order.AddDomainEvent(new OrderCreatedEvent(order));
+
+            return order;
+        }
+
+        public void Update(Guid customerId, OrderStatusEnum status)
+        {
+            CustomerId = customerId;
+            Status = status;
+
+            AddDomainEvent(new OrderUpdatedEvent(this));
         }
 
         // Métodos de domínio
@@ -41,21 +71,22 @@ namespace ECommerceSystem.Domain.Entities
             Status = OrderStatusEnum.CANCELED;
         }
 
-        public void AdicionarItem(OrderItem item)
+        public void AddItem(Guid productId, int quantity, decimal price)
         {
-            Itens.Add(item);
-            Total = CalculateTotal();
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
+
+            var orderItem = new OrderItem(Id, productId, quantity, price);
+            _Items.Add(orderItem);
         }
 
-        public void RemoverItem(OrderItem item)
+        public void RemoveItem(Guid productId)
         {
-            Itens.Remove(item);
-            Total = CalculateTotal();
-        }
-
-        private decimal CalculateTotal()
-        {
-            return Itens.Sum(i => i.Price * i.Quantity);
+            var orderItem = _Items.FirstOrDefault(x => x.ProductId == productId);
+            if (orderItem is not null)
+            {
+                _Items.Remove(orderItem);
+            }
         }
     }
 }

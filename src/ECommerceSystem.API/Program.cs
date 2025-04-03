@@ -1,3 +1,4 @@
+using Carter;
 using ECommerceSystem.API.Extensions;
 using ECommerceSystem.Application.Commands.CreateOrder;
 using ECommerceSystem.Application.Validators;
@@ -14,11 +15,11 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DbConnection");
-builder.Services.AddDbContext<ECommerceSystemContext>(options => options.UseNpgsql(connectionString), ServiceLifetime.Scoped);
+builder.Services.AddDbContext<ECommerceSystemContext>(options => options.UseNpgsql(connectionString));
 
 // Add services to the container.
+builder.Services.AddCarter();
 
-builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddInfrastructure();
@@ -36,11 +37,11 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Services.AddValidatorsFromAssembly(typeof(CreateOrderCommandValidator).Assembly);
 
-builder.Services.AddAutoMapperConfig();
-
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 builder.Services.AddHealthChecksConfig(builder.Configuration);
+
+
 
 var app = builder.Build();
 
@@ -51,13 +52,9 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
+app.MapCarter();
+
 app.UseExceptionHandler(options => { });
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 app.UseHealthChecks("/health", new HealthCheckOptions
 {

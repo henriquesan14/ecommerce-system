@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace ECommerceSystem.Infrastructure.Persistence.Repositories
 {
-    public class RepositoryBase<T> : IAsyncRepository<T> where T : Entity
+    public class RepositoryBase<TEntity, TId> : IAsyncRepository<TEntity, TId> where TEntity : Entity<TId>, IAggregate<TId>
     {
         protected readonly ECommerceSystemContext DbContext;
 
@@ -13,9 +13,9 @@ namespace ECommerceSystem.Infrastructure.Persistence.Repositories
             DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync(Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, bool disableTracking = true)
+        public async Task<IReadOnlyList<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, bool disableTracking = true)
         {
-            IQueryable<T> query = DbContext.Set<T>();
+            IQueryable<TEntity> query = DbContext.Set<TEntity>();
             if (disableTracking) query = query.AsNoTracking();
             if (orderBy != null)
             {
@@ -24,15 +24,15 @@ namespace ECommerceSystem.Infrastructure.Persistence.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate)
+        public async Task<IReadOnlyList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await DbContext.Set<T>().Where(predicate).ToListAsync();
+            return await DbContext.Set<TEntity>().Where(predicate).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null,
-          Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeString = null, bool disableTracking = true)
+        public async Task<IReadOnlyList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate = null,
+          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeString = null, bool disableTracking = true)
         {
-            IQueryable<T> query = DbContext.Set<T>();
+            IQueryable<TEntity> query = DbContext.Set<TEntity>();
             if (disableTracking) query = query.AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(includeString)) query = query.Include(includeString);
@@ -46,11 +46,11 @@ namespace ECommerceSystem.Infrastructure.Persistence.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null,
-          Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, List<Expression<Func<T, object>>> includes = null,
+        public async Task<IReadOnlyList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate = null,
+          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, List<Expression<Func<TEntity, object>>> includes = null,
           bool disableTracking = true, int? pageNumber = null, int? pageSize = 20)
         {
-            IQueryable<T> query = DbContext.Set<T>();
+            IQueryable<TEntity> query = DbContext.Set<TEntity>();
             if (disableTracking) query = query.AsNoTracking();
 
             if (includes != null) query = includes.Aggregate(query, (current, include) => current.Include(include));
@@ -72,9 +72,9 @@ namespace ECommerceSystem.Infrastructure.Persistence.Repositories
         }
 
 
-        public async Task<T> GetByIdAsync(int id, bool disableTracking = false, List<Expression<Func<T, object>>> includes = null)
+        public async Task<TEntity> GetByIdAsync(TId id, bool disableTracking = false, List<Expression<Func<TEntity, object>>> includes = null)
         {
-            IQueryable<T> query = DbContext.Set<T>();
+            IQueryable<TEntity> query = DbContext.Set<TEntity>();
 
             if (includes != null)
             {
@@ -86,12 +86,12 @@ namespace ECommerceSystem.Infrastructure.Persistence.Repositories
                 query = query.AsNoTracking();
             }
 
-            return await query.FirstOrDefaultAsync(e => e.Id == id);
+            return await query.FirstOrDefaultAsync(e => e.Id.Equals(id));
         }
 
-        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate, bool disableTracking = false, List<Expression<Func<T, object>>> includes = null)
+        public async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> predicate, bool disableTracking = false, List<Expression<Func<TEntity, object>>> includes = null)
         {
-            IQueryable<T> query = DbContext.Set<T>();
+            IQueryable<TEntity> query = DbContext.Set<TEntity>();
 
             if (includes != null)
             {
@@ -106,32 +106,32 @@ namespace ECommerceSystem.Infrastructure.Persistence.Repositories
             return await query.FirstOrDefaultAsync(predicate);
         }
 
-        public async Task<T> AddAsync(T entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
-            await DbContext.Set<T>().AddAsync(entity);
+            await DbContext.Set<TEntity>().AddAsync(entity);
             return entity;
         }
 
-        public async Task AddRangeAsync(List<T> entity)
+        public async Task AddRangeAsync(List<TEntity> entity)
         {
-            await DbContext.Set<T>().AddRangeAsync(entity);
+            await DbContext.Set<TEntity>().AddRangeAsync(entity);
         }
 
-        public void UpdateAsync(T entity)
+        public void UpdateAsync(TEntity entity)
         {
             DbContext.Entry(entity).State = EntityState.Modified;
         }
 
-        public void DeleteAsync(T entity)
+        public void DeleteAsync(TEntity entity)
         {
-            DbContext.Set<T>().Remove(entity);
+            DbContext.Set<TEntity>().Remove(entity);
         }
 
-        public virtual async Task<int> GetCountAsync(Expression<Func<T, bool>> predicate = null)
+        public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> predicate = null)
         {
             return predicate == null
-            ? await DbContext.Set<T>().CountAsync()
-            : await DbContext.Set<T>().CountAsync(predicate);
+            ? await DbContext.Set<TEntity>().CountAsync()
+            : await DbContext.Set<TEntity>().CountAsync(predicate);
         }
     }
 }

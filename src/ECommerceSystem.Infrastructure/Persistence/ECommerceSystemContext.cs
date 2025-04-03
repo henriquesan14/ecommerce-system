@@ -1,6 +1,8 @@
 ﻿using ECommerceSystem.Domain.Entities;
+using ECommerceSystem.Infrastructure.Configurations;
 using ECommerceSystem.Shared.Base;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace ECommerceSystem.Infrastructure.Persistence
 {
@@ -17,6 +19,8 @@ namespace ECommerceSystem.Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderItemConfiguration());
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 foreach (var property in entityType.GetProperties())
@@ -31,9 +35,10 @@ namespace ECommerceSystem.Infrastructure.Persistence
             base.OnModelCreating(modelBuilder);
         }
 
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var entry in ChangeTracker.Entries<Entity>())
+            foreach (var entry in ChangeTracker.Entries<IEntity>())
             {
                 switch (entry.State)
                 {
@@ -42,7 +47,7 @@ namespace ECommerceSystem.Infrastructure.Persistence
                         break;
 
                     case EntityState.Modified:
-                        entry.Entity.UpdatedAt = DateTime.Now;
+                        entry.Entity.LastModified = DateTime.Now;
                         break;
                 }
             }

@@ -4,7 +4,7 @@ using ECommerceSystem.Shared.CQRS;
 
 namespace ECommerceSystem.Application.Queries.GetOrders
 {
-    public class GetOrdersQuery : IQuery<Result<List<OrderViewModel>>>
+    public class GetOrdersQuery : IQuery<Result<IEnumerable<OrderViewModel>>>
     {
     }
 }

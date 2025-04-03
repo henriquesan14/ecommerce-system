@@ -1,22 +1,27 @@
-﻿using ECommerceSystem.Shared.Base;
+﻿using ECommerceSystem.Domain.ValueObjects;
+using ECommerceSystem.Shared.Base;
 
 namespace ECommerceSystem.Domain.Entities
 {
-    public class OrderItem : Entity
+    public class OrderItem : Aggregate<OrderItemId>
     {
-        public int ProdutoId { get; private set; }
+        public Guid ProductId { get; private set; }
         public decimal Price { get; private set; }
         public int Quantity { get; private set; }
+        public OrderId OrderId { get; private set; } = default!;
 
-        public OrderItem(int produtoId, string name, decimal price, int quantity)
+        internal OrderItem(OrderId orderId, Guid productId, int quantity, decimal price)
         {
-            ProdutoId = produtoId;
-            Price = price;
+            Id = OrderItemId.Of(Guid.NewGuid());
+            OrderId = orderId;
+            ProductId = productId;
             Quantity = quantity;
+            Price = price;
         }
 
         private OrderItem()
         {
+            Id = OrderItemId.Of(Guid.NewGuid());
         }
 
         public void SetQuantity(int quantity)

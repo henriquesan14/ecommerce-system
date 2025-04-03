@@ -1,6 +1,6 @@
 ﻿namespace ECommerceSystem.Application.ViewModels
 {
-    public record OrderItemViewModel(int Id, int ProdutoId, decimal Price, int Quantity)
+    public record OrderItemViewModel(Guid Id, Guid ProductId, decimal Price, int Quantity)
     {
     }
 }
