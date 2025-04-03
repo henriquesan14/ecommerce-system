@@ -3,7 +3,7 @@ using ECommerceSystem.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ECommerceSystem.Infrastructure.Configurations
+namespace ECommerceSystem.Infrastructure.Persistence.Configurations
 {
     public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
     {
@@ -15,7 +15,9 @@ namespace ECommerceSystem.Infrastructure.Configurations
                                        orderItemId => orderItemId.Value,
                                        dbId => OrderItemId.Of(dbId));
 
-            builder.Property(oi => oi.ProductId).IsRequired();
+            builder.HasOne<Product>()
+            .WithMany()
+            .HasForeignKey(oi => oi.ProductId);
 
             builder.Property(oi => oi.Quantity).IsRequired();
 

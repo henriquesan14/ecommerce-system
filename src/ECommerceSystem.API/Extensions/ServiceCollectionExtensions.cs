@@ -7,7 +7,7 @@ namespace ECommerceSystem.API.Extensions
     public static class ServiceCollectionExtensions
     {
 
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructureRepositories(this IServiceCollection services)
         {
             //Repositories
 

@@ -12,7 +12,7 @@ namespace ECommerceSystem.EventBus.Abstractions
         protected IntegrationEvent()
         {
             Id = Guid.NewGuid();
-            CreatedAt = DateTime.UtcNow;
+            CreatedAt = DateTime.Now;
         }
     }
 }

@@ -7,37 +7,27 @@ namespace ECommerceSystem.Domain.Entities
 {
     public class Order : Aggregate<OrderId>
     {
-        public OrderStatusEnum Status { get; private set; }
-        public Guid CustomerId { get; private set; }
+        private readonly List<OrderItem> _Items = new();
+        public IReadOnlyList<OrderItem> Items => _Items.AsReadOnly();
+
+        public CustomerId CustomerId { get; private set; } = default!;
+        public Address ShippingAddress { get; private set; } = default!;
+        public Payment Payment { get; private set; } = default!;
+        public OrderStatusEnum Status { get; private set; } = OrderStatusEnum.PENDING;
         public decimal Total
         {
             get => Items.Sum(x => x.Price * x.Quantity);
             private set { }
         }
 
-        private readonly List<OrderItem> _Items = new();
-        public IReadOnlyList<OrderItem> Items => _Items.AsReadOnly();
-
-        private Order()
-        {
-            Id = OrderId.Of(Guid.NewGuid());
-            _Items = new List<OrderItem>();
-        }
-
-        public Order(List<OrderItem> itens, Guid customerId)
-        {
-            _Items = itens;
-            CustomerId = customerId;
-            CreatedAt = DateTime.Now;
-            Status = OrderStatusEnum.PENDING;
-        }
-
-        public static Order Create(OrderId id, Guid customerId)
+        public static Order Create(OrderId id, CustomerId customerId, Address shippingAddress, Payment payment)
         {
             var order = new Order
             {
                 Id = id,
                 CustomerId = customerId,
+                ShippingAddress = shippingAddress,
+                Payment = payment,
                 Status = OrderStatusEnum.PENDING
             };
 
@@ -46,9 +36,10 @@ namespace ECommerceSystem.Domain.Entities
             return order;
         }
 
-        public void Update(Guid customerId, OrderStatusEnum status)
+        public void Update(Address shippingAddress, Payment payment, OrderStatusEnum status)
         {
-            CustomerId = customerId;
+            ShippingAddress = shippingAddress;
+            Payment = payment;
             Status = status;
 
             AddDomainEvent(new OrderUpdatedEvent(this));
@@ -71,7 +62,7 @@ namespace ECommerceSystem.Domain.Entities
             Status = OrderStatusEnum.CANCELED;
         }
 
-        public void AddItem(Guid productId, int quantity, decimal price)
+        public void AddItem(ProductId productId, int quantity, decimal price)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
@@ -80,7 +71,7 @@ namespace ECommerceSystem.Domain.Entities
             _Items.Add(orderItem);
         }
 
-        public void RemoveItem(Guid productId)
+        public void RemoveItem(ProductId productId)
         {
             var orderItem = _Items.FirstOrDefault(x => x.ProductId == productId);
             if (orderItem is not null)

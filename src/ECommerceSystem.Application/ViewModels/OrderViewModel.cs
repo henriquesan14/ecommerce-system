@@ -2,7 +2,13 @@
 
 namespace ECommerceSystem.Application.ViewModels
 {
-    public record OrderViewModel(Guid Id, OrderStatusEnum Status, decimal Total, List<OrderItemViewModel> Itens, Guid CustomerId)
+    public record OrderViewModel(Guid Id,
+        Guid CustomerId,
+        AddressViewModel ShippingAddress,
+        PaymentViewModel Payment,
+        OrderStatusEnum Status,
+        decimal Total,
+        List<OrderItemViewModel> Itens)
     {
     }
 }

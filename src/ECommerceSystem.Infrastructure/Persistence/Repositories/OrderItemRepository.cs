@@ -6,7 +6,7 @@ namespace ECommerceSystem.Infrastructure.Persistence.Repositories
 {
     public class OrderItemRepository : RepositoryBase<OrderItem, OrderItemId>, IOrderItemRepository
     {
-        public OrderItemRepository(ECommerceSystemContext dbContext) : base(dbContext)
+        public OrderItemRepository(ECommerceSystemDbContext dbContext) : base(dbContext)
         {
         }
     }

@@ -8,7 +8,7 @@ namespace ECommerceSystem.Application.Validators
         public CreateOrderCommandValidator()
         {
             RuleFor(c => c.CustomerId).NotEmpty().WithMessage("{PropertyName} é obrigatório");
-            RuleFor(c => c.Itens).NotEmpty().WithMessage("{PropertyName} é obrigatório");
+            RuleFor(c => c.Items).NotEmpty().WithMessage("{PropertyName} é obrigatório");
         }
     }
 }

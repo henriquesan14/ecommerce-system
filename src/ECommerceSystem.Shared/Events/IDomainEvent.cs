@@ -1,6 +1,8 @@
-﻿namespace ECommerceSystem.Shared.Events
+﻿using MediatR;
+
+namespace ECommerceSystem.Shared.Events
 {
-    public interface IDomainEvent
+    public interface IDomainEvent : INotification
     {
         Guid EventId => Guid.NewGuid();
         public DateTime OccurredOn => DateTime.Now;

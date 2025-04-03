@@ -3,26 +3,44 @@ using ECommerceSystem.Application.ViewModels;
 using ECommerceSystem.Domain.Entities;
 using ECommerceSystem.Domain.Interfaces.Repositories;
 using ECommerceSystem.Domain.ValueObjects;
-using ECommerceSystem.EventBus;
-using ECommerceSystem.EventBus.Abstractions;
 using ECommerceSystem.EventBus.Events;
 using ECommerceSystem.Shared.Base;
 using ECommerceSystem.Shared.CQRS;
+using MassTransit;
 
 namespace ECommerceSystem.Application.Commands.CreateOrder
 {
-    internal class CreateOrderCommandHandler(IUnitOfWork _unitOfWork, IEventBus _eventBus) : ICommandHandler<CreateOrderCommand, Result<OrderViewModel>>
+    internal class CreateOrderCommandHandler(IUnitOfWork _unitOfWork, IPublishEndpoint publishEndpoint) : ICommandHandler<CreateOrderCommand, Result<OrderViewModel>>
     {
         public async Task<Result<OrderViewModel>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
+            var shippingAddress = Address.Of(
+                firstName: request.ShippingAddress.FirstName,
+                lastName: request.ShippingAddress.LastName,
+                emailAddress: request.ShippingAddress.EmailAddress,
+                addressLine: request.ShippingAddress.AddressLine,
+                country: request.ShippingAddress.Country,
+                state: request.ShippingAddress.State,
+                zipCode: request.ShippingAddress.ZipCode
+            );
+
+            var payment = Payment.Of(
+                cardName: request.Payment.CardName,
+                cardNumber: request.Payment.CardNumber,
+                expiration: request.Payment.Expiration,
+                cvv: request.Payment.Cvv,
+                paymentMethod: request.Payment.PaymentMethod
+            );
 
             var entity = Order.Create(
                 id: OrderId.Of(Guid.NewGuid()),
-                customerId: request.CustomerId
+                customerId: CustomerId.Of(request.CustomerId),
+                shippingAddress: shippingAddress,
+                payment: payment
             );
-            foreach (var orderItem in request.Itens)
+            foreach (var orderItem in request.Items)
             {
-                entity.AddItem(orderItem.ProductId, orderItem.Quantity, orderItem.Price);
+                entity.AddItem(ProductId.Of(orderItem.ProductId), orderItem.Quantity, orderItem.Price);
             }
 
             await _unitOfWork.BeginTransaction();
@@ -31,7 +49,7 @@ namespace ECommerceSystem.Application.Commands.CreateOrder
             await _unitOfWork.CompleteAsync();
 
             var orderCreatedEvent = new OrderCreatedEvent(entity.Id.Value, entity.Total);
-            await _eventBus.PublishAsync(orderCreatedEvent, EventBusConstants.ORDER_CREATED_QUEUE);
+            await publishEndpoint.Publish(orderCreatedEvent);
 
             await _unitOfWork.CommitAsync();
 

@@ -6,9 +6,9 @@ namespace ECommerceSystem.Infrastructure.Persistence.Repositories
 {
     public class RepositoryBase<TEntity, TId> : IAsyncRepository<TEntity, TId> where TEntity : Entity<TId>, IAggregate<TId>
     {
-        protected readonly ECommerceSystemContext DbContext;
+        protected readonly ECommerceSystemDbContext DbContext;
 
-        public RepositoryBase(ECommerceSystemContext dbContext)
+        public RepositoryBase(ECommerceSystemDbContext dbContext)
         {
             DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }

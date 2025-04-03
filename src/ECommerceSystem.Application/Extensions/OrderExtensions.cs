@@ -9,10 +9,12 @@ namespace ECommerceSystem.Application.Extensions
         {
             return orders.Select(order => new OrderViewModel(
                 Id: order.Id.Value,
-                CustomerId: order.CustomerId,
+                CustomerId: order.CustomerId.Value,
+                ShippingAddress: new AddressViewModel(order.ShippingAddress.FirstName, order.ShippingAddress.LastName, order.ShippingAddress.EmailAddress!, order.ShippingAddress.AddressLine, order.ShippingAddress.Country, order.ShippingAddress.State, order.ShippingAddress.ZipCode),
+                Payment: new PaymentViewModel(order.Payment.CardName!, order.Payment.CardNumber, order.Payment.Expiration, order.Payment.CVV, order.Payment.PaymentMethod),
                 Status: order.Status,
                 Total: order.Total,
-                Itens: order.Items.Select(oi => new OrderItemViewModel(oi.OrderId.Value, oi.ProductId, oi.Price, oi.Quantity)).ToList()
+                Itens: order.Items.Select(oi => new OrderItemViewModel(oi.OrderId.Value, oi.ProductId.Value, oi.Price, oi.Quantity)).ToList()
             ));
         }
 
@@ -25,10 +27,12 @@ namespace ECommerceSystem.Application.Extensions
         {
             return new OrderViewModel(
                 Id: order.Id.Value,
-                CustomerId: order.CustomerId,
+                CustomerId: order.CustomerId.Value,
+                ShippingAddress: new AddressViewModel(order.ShippingAddress.FirstName, order.ShippingAddress.LastName, order.ShippingAddress.EmailAddress!, order.ShippingAddress.AddressLine, order.ShippingAddress.Country, order.ShippingAddress.State, order.ShippingAddress.ZipCode),
+                Payment: new PaymentViewModel(order.Payment.CardName!, order.Payment.CardNumber, order.Payment.Expiration, order.Payment.CVV, order.Payment.PaymentMethod),
                 Status: order.Status,
                 Total: order.Total,
-                Itens: order.Items.Select(oi => new OrderItemViewModel(oi.OrderId.Value, oi.ProductId, oi.Price, oi.Quantity)).ToList()
+                Itens: order.Items.Select(oi => new OrderItemViewModel(oi.OrderId.Value, oi.ProductId.Value, oi.Price, oi.Quantity)).ToList()
             );
         }
     }

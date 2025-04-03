@@ -3,30 +3,29 @@ using ECommerceSystem.API.Extensions;
 using ECommerceSystem.Application.Commands.CreateOrder;
 using ECommerceSystem.Application.Validators;
 using ECommerceSystem.EventBus;
-using ECommerceSystem.Infrastructure.Persistence;
+using ECommerceSystem.Infrastructure;
 using ECommerceSystem.Shared.Behaviors;
 using ECommerceSystem.Shared.Exceptions.Handler;
 using FluentValidation;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DbConnection");
-builder.Services.AddDbContext<ECommerceSystemContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddCarter();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructureRepositories();
 
 builder.Services.AddJsonSerializationConfig();
 
-builder.Services.AddEventBus(builder.Configuration);
+//builder.Services.AddEventBus(builder.Configuration);
+builder.Services.AddMessageBroker(builder.Configuration);
 
 builder.Services.AddMediatR(cfg =>
 {

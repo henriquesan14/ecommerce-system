@@ -6,12 +6,12 @@ namespace ECommerceSystem.Infrastructure.Persistence.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private IDbContextTransaction _transaction;
-        private readonly ECommerceSystemContext _dbContext;
+        private readonly ECommerceSystemDbContext _dbContext;
 
         public IOrderRepository Orders { get; }
         public IOrderItemRepository OrderItems { get; }
 
-        public UnitOfWork(ECommerceSystemContext dbContext, IOrderRepository orders, IOrderItemRepository orderItems)
+        public UnitOfWork(ECommerceSystemDbContext dbContext, IOrderRepository orders, IOrderItemRepository orderItems)
         {
             _dbContext = dbContext;
             Orders = orders;
