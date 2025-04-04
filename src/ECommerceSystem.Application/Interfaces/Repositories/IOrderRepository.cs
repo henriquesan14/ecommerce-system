@@ -2,7 +2,7 @@
 using ECommerceSystem.Domain.ValueObjects;
 using ECommerceSystem.Shared.Base;
 
-namespace ECommerceSystem.Domain.Interfaces.Repositories
+namespace ECommerceSystem.Application.Interfaces.Repositories
 {
     public interface IOrderRepository : IAsyncRepository<Order, OrderId>
     {

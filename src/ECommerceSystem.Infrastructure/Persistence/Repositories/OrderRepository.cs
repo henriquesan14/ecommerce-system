@@ -1,5 +1,5 @@
 ﻿using ECommerceSystem.Domain.Entities;
-using ECommerceSystem.Domain.Interfaces.Repositories;
+using ECommerceSystem.Application.Interfaces.Repositories;
 using ECommerceSystem.Domain.ValueObjects;
 
 namespace ECommerceSystem.Infrastructure.Persistence.Repositories

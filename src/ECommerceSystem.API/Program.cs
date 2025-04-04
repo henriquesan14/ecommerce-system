@@ -14,7 +14,9 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddInfrastructureDatabase(builder.Configuration);
+
+builder.Services.AddJsonSerializationConfig();
 
 // Add services to the container.
 builder.Services.AddCarter();
@@ -22,8 +24,8 @@ builder.Services.AddCarter();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddInfrastructureRepositories();
+builder.Services.AddRedis(builder.Configuration);
 
-builder.Services.AddJsonSerializationConfig();
 
 builder.Services.AddMessageBroker(builder.Configuration, typeof(OrderCreatedIntegrationEventHandler).Assembly);
 
@@ -39,8 +41,6 @@ builder.Services.AddValidatorsFromAssembly(typeof(CreateOrderCommandValidator).A
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 builder.Services.AddHealthChecksConfig(builder.Configuration);
-
-
 
 var app = builder.Build();
 

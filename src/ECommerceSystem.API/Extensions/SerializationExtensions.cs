@@ -6,14 +6,11 @@ namespace ECommerceSystem.API.Extensions
     {
         public static IServiceCollection AddJsonSerializationConfig(this IServiceCollection services)
         {
-            services.AddControllers().AddJsonOptions(options =>
+            services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
             {
-                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-
-                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-
-
+                options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
 
             return services;

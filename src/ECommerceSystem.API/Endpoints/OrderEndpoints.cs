@@ -15,7 +15,7 @@ namespace ECommerceSystem.API.Endpoints
             {
                 var result = await sender.Send(command);
 
-                return Results.Created($"orders/{result.Value.Id}", result);
+                return Results.Created($"orders/{result.Id}", result);
             });
 
             group.MapGet("/", async (ISender sender) =>

@@ -25,11 +25,9 @@ namespace ECommerceSystem.Shared.Base
 
         Task<TEntity> AddAsync(TEntity entity);
 
-        Task AddRangeAsync(List<TEntity> entity);
+        Task UpdateAsync(TEntity entity);
 
-        void UpdateAsync(TEntity entity);
-
-        void DeleteAsync(TEntity entity);
+        Task RemoveAsync(TEntity entity);
         Task<int> GetCountAsync(Expression<Func<TEntity, bool>> predicate = null);
     }
 }

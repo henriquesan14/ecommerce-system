@@ -4,9 +4,9 @@ using ECommerceSystem.Domain.ValueObjects;
 
 namespace ECommerceSystem.Infrastructure.Persistence.Repositories
 {
-    public class OrderItemRepository : RepositoryBase<OrderItem, OrderItemId>, IOrderItemRepository
+    public class ProductRepository : RepositoryBase<Product, ProductId>, IProductRepository
     {
-        public OrderItemRepository(ECommerceSystemDbContext dbContext) : base(dbContext)
+        public ProductRepository(ECommerceSystemDbContext dbContext) : base(dbContext)
         {
         }
     }

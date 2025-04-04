@@ -1,7 +1,7 @@
 ﻿using ECommerceSystem.Application.Extensions;
 using ECommerceSystem.Application.ViewModels;
 using ECommerceSystem.Domain.Entities;
-using ECommerceSystem.Domain.Interfaces.Repositories;
+using ECommerceSystem.Application.Interfaces.Repositories;
 using ECommerceSystem.Domain.ValueObjects;
 using ECommerceSystem.EventBus.Events;
 using ECommerceSystem.Shared.Base;
@@ -10,9 +10,9 @@ using MassTransit;
 
 namespace ECommerceSystem.Application.Commands.CreateOrder
 {
-    internal class CreateOrderCommandHandler(IUnitOfWork _unitOfWork, IPublishEndpoint publishEndpoint) : ICommandHandler<CreateOrderCommand, Result<OrderViewModel>>
+    internal class CreateOrderCommandHandler(IUnitOfWork _unitOfWork, IPublishEndpoint publishEndpoint) : ICommandHandler<CreateOrderCommand, OrderViewModel>
     {
-        public async Task<Result<OrderViewModel>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+        public async Task<OrderViewModel> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var shippingAddress = Address.Of(
                 firstName: request.ShippingAddress.FirstName,
@@ -54,8 +54,7 @@ namespace ECommerceSystem.Application.Commands.CreateOrder
 
             await _unitOfWork.CommitAsync();
 
-            var viewModel = entity.ToOrderDto();
-            return Result<OrderViewModel>.Success(viewModel);
+            return entity.ToOrderDto();
         }
     }
 }

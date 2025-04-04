@@ -16,11 +16,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    <PackageReference Include="Scrutor" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ECommerceSystem.Domain\ECommerceSystem.Domain.csproj" />
+    <ProjectReference Include="..\ECommerceSystem.Application\ECommerceSystem.Application.csproj" />
     <ProjectReference Include="..\ECommerceSystem.Shared\ECommerceSystem.Shared.csproj" />
   </ItemGroup>
 

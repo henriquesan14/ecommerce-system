@@ -112,19 +112,16 @@ namespace ECommerceSystem.Infrastructure.Persistence.Repositories
             return entity;
         }
 
-        public async Task AddRangeAsync(List<TEntity> entity)
-        {
-            await DbContext.Set<TEntity>().AddRangeAsync(entity);
-        }
-
-        public void UpdateAsync(TEntity entity)
+        public Task UpdateAsync(TEntity entity)
         {
             DbContext.Entry(entity).State = EntityState.Modified;
+            return Task.CompletedTask;
         }
 
-        public void DeleteAsync(TEntity entity)
+        public Task RemoveAsync(TEntity entity)
         {
             DbContext.Set<TEntity>().Remove(entity);
+            return Task.CompletedTask;
         }
 
         public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> predicate = null)

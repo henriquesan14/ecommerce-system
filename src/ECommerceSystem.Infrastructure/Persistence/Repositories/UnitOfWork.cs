@@ -1,4 +1,4 @@
-﻿using ECommerceSystem.Domain.Interfaces.Repositories;
+﻿using ECommerceSystem.Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ECommerceSystem.Infrastructure.Persistence.Repositories
@@ -10,12 +10,14 @@ namespace ECommerceSystem.Infrastructure.Persistence.Repositories
 
         public IOrderRepository Orders { get; }
         public IOrderItemRepository OrderItems { get; }
+        public IProductRepository Products { get; }
 
-        public UnitOfWork(ECommerceSystemDbContext dbContext, IOrderRepository orders, IOrderItemRepository orderItems)
+        public UnitOfWork(ECommerceSystemDbContext dbContext, IOrderRepository orders, IOrderItemRepository orderItems, IProductRepository products)
         {
             _dbContext = dbContext;
             Orders = orders;
             OrderItems = orderItems;
+            Products = products;
         }
 
         public async Task BeginTransaction()
