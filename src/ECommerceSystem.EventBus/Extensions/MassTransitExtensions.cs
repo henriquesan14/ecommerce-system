@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace ECommerceSystem.EventBus
+namespace ECommerceSystem.EventBus.Extensions
 {
     public static class Extentions
     {
@@ -21,8 +21,8 @@ namespace ECommerceSystem.EventBus
                 {
                     configurator.Host(new Uri(configuration["MessageBroker:Host"]!), host =>
                     {
-                        host.Username(configuration["MessageBroker:UserName"]);
-                        host.Password(configuration["MessageBroker:Password"]);
+                        host.Username(configuration["MessageBroker:UserName"]!);
+                        host.Password(configuration["MessageBroker:Password"]!);
                     });
                     configurator.ConfigureEndpoints(context);
                 });

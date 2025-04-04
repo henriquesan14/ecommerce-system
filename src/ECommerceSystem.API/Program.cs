@@ -1,8 +1,9 @@
 using Carter;
 using ECommerceSystem.API.Extensions;
 using ECommerceSystem.Application.Commands.CreateOrder;
+using ECommerceSystem.Application.EventHandlers.Integration;
 using ECommerceSystem.Application.Validators;
-using ECommerceSystem.EventBus;
+using ECommerceSystem.EventBus.Extensions;
 using ECommerceSystem.Infrastructure;
 using ECommerceSystem.Shared.Behaviors;
 using ECommerceSystem.Shared.Exceptions.Handler;
@@ -24,8 +25,7 @@ builder.Services.AddInfrastructureRepositories();
 
 builder.Services.AddJsonSerializationConfig();
 
-//builder.Services.AddEventBus(builder.Configuration);
-builder.Services.AddMessageBroker(builder.Configuration);
+builder.Services.AddMessageBroker(builder.Configuration, typeof(OrderCreatedIntegrationEventHandler).Assembly);
 
 builder.Services.AddMediatR(cfg =>
 {

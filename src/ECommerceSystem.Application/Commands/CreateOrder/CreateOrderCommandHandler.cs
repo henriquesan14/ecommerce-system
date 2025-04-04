@@ -48,8 +48,9 @@ namespace ECommerceSystem.Application.Commands.CreateOrder
             await _unitOfWork.Orders.AddAsync(entity);
             await _unitOfWork.CompleteAsync();
 
-            var orderCreatedEvent = new OrderCreatedEvent(entity.Id.Value, entity.Total);
-            await publishEndpoint.Publish(orderCreatedEvent);
+            var orderCreatedEvent = new OrderCreatedIntegrationEvent(entity.Id.Value, entity.Total);
+
+            await publishEndpoint.Publish(orderCreatedEvent, cancellationToken);
 
             await _unitOfWork.CommitAsync();
 
