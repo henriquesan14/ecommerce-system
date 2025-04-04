@@ -1,4 +1,5 @@
-﻿using ECommerceSystem.Application.Interfaces.Repositories;
+﻿using ECommerceSystem.Application.Interfaces;
+using ECommerceSystem.Application.Interfaces.Repositories;
 using ECommerceSystem.Infrastructure.Persistence;
 using ECommerceSystem.Infrastructure.Persistence.Interceptors;
 using ECommerceSystem.Infrastructure.Persistence.Repositories;

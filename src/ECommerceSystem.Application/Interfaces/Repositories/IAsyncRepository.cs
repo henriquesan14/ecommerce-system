@@ -1,6 +1,7 @@
-﻿using System.Linq.Expressions;
+﻿using ECommerceSystem.Shared.Base;
+using System.Linq.Expressions;
 
-namespace ECommerceSystem.Shared.Base
+namespace ECommerceSystem.Application.Interfaces
 {
     public interface IAsyncRepository<TEntity, TId> where TEntity : IAggregate<TId>
     {

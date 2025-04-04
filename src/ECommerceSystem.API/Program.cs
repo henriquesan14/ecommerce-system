@@ -61,4 +61,4 @@ app.UseHealthChecks("/health", new HealthCheckOptions
 });
 
 
-app.Run();
+await app.RunAsync();

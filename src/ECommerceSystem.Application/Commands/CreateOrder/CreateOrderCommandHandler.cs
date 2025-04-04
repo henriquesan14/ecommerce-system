@@ -1,10 +1,9 @@
 ﻿using ECommerceSystem.Application.Extensions;
+using ECommerceSystem.Application.Interfaces.Repositories;
 using ECommerceSystem.Application.ViewModels;
 using ECommerceSystem.Domain.Entities;
-using ECommerceSystem.Application.Interfaces.Repositories;
 using ECommerceSystem.Domain.ValueObjects;
 using ECommerceSystem.EventBus.Events;
-using ECommerceSystem.Shared.Base;
 using ECommerceSystem.Shared.CQRS;
 using MassTransit;
 

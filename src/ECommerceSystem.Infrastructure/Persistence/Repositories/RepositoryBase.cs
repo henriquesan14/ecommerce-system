@@ -1,4 +1,5 @@
-﻿using ECommerceSystem.Shared.Base;
+﻿using ECommerceSystem.Application.Interfaces;
+using ECommerceSystem.Shared.Base;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

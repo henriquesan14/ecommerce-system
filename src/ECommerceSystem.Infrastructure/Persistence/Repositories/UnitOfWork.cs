@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ECommerceSystem.Infrastructure.Persistence.Repositories
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private IDbContextTransaction _transaction;
         private readonly ECommerceSystemDbContext _dbContext;
