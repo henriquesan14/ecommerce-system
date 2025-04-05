@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ECommerceSystem.Application\ECommerceSystem.Application.csproj" />
-    <ProjectReference Include="..\ECommerceSystem.Infrastructure\ECommerceSystem.Infrastructure.csproj" />
+    <ProjectReference Include="..\ECommerceSystem.Ordering.Application\ECommerceSystem.Ordering.Application.csproj" />
+    <ProjectReference Include="..\ECommerceSystem.Ordering.Infrastructure\ECommerceSystem.Ordering.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

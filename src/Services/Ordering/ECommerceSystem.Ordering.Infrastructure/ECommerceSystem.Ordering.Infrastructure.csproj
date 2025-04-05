@@ -22,13 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ECommerceSystem.Application\ECommerceSystem.Application.csproj" />
-    <ProjectReference Include="..\ECommerceSystem.Shared\ECommerceSystem.Shared.csproj" />
+    <Folder Include="EventBus\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="EventBus\" />
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\ECommerceSystem.Shared\ECommerceSystem.Shared.csproj" />
+    <ProjectReference Include="..\ECommerceSystem.Ordering.Application\ECommerceSystem.Ordering.Application.csproj" />
   </ItemGroup>
 
 </Project>

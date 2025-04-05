@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ECommerceSystem.Domain\ECommerceSystem.Domain.csproj" />
-    <ProjectReference Include="..\ECommerceSystem.EventBus\ECommerceSystem.EventBus.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\ECommerceSystem.EventBus\ECommerceSystem.EventBus.csproj" />
+    <ProjectReference Include="..\ECommerceSystem.Ordering.Domain\ECommerceSystem.Ordering.Domain.csproj" />
   </ItemGroup>
 
 </Project>
